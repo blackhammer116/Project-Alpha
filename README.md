@@ -55,7 +55,7 @@ This repository constains the following files:
 ## Version 📌
 ProjectArtimus - version 0.1
 
-##License 🌐
+## License 🌐
 Public Domain. No copy write protection.
 
 ## Acknowledgements 🙌
