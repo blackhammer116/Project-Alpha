@@ -1,4 +1,4 @@
-![Project_Artimus Logo](./images/PA_logo.png)
+![Project_Artimus Logo](./images/)
 
 ## Contents :accessibility:
 
