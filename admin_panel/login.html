@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="trial.css">
+        <title>Admin Login</title>
+    </head>
+    <style>
+        .center{
+            display: flex;
+            flex-direction: row;
+            align-content: center;
+            justify-content: center;
+            margin-top: 200px;
+            margin-left: 300px;
+            color:white;
+            border-radius: 10px;
+            background-color: rgba(41, 47, 68, 0.849);
+        }
+        body {
+            background-image: url('images/wp4466252-htc-desire-19-wallpapers.jpg');
+        }
+        .button {
+            border-radius: 6px;
+        }
+        
+    </style>
+    <body>
+        <div class="center w3-card w3-half">
+            <form action="login.php" method="POST" class="">
+                <label><h3>Admin login</h3></label><br>
+                <input required name="username" id="username" placeholder="Username" class="w3-input"/><br>
+                <input required type="password" name="password" id="password" placeholder="Password" class="w3-input"/><br>
+                <input type="submit" value="login" name="login" class="w3-button button w3-light-gray" />
+            </form>
+    </div>
+    </body>
+
+</html>
