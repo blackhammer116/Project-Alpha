@@ -17,3 +17,6 @@ def scan():
     the file will be uploaded to the database and SMTP will
     be triggered and results will be sent to the client
     """
+
+if __name__ == "__main__":
+    scan()
