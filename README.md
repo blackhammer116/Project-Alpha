@@ -1,4 +1,4 @@
-![Project_Artimus Logo](./images/)
+![Project_Artimus Logo](.webflask/static/images/projectartimuslogo.png)
 
 ## Contents :accessibility:
 
