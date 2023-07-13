@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Search Results{% endblock %}
+{% block content %}
+<h4 class="text-center">Search Results</h4>
+<div class="container-fluid">
+  <p>Showing results for: {{ query }}</p>
+  <ul class="list-group list-group-numbered" id="search-results">
+    {% for result in results %}
+    <li class="list-group-item">
+      {{ result.data }}
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

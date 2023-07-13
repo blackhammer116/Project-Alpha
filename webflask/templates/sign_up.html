@@ -1,0 +1,33 @@
+{% extends "base.html" %}{% block title %}Sign Up{% endblock %}
+{% block content %}
+<div class="container col-sm-8 mt-2 rounded shadow">
+    <div class="container p-3">
+    <h2>SIGN UP</h2>
+    <small>Already have an account? <a href="/login">Login</a></small><br><br>
+    <form method="POST" autocomplete="on">
+        <div class="mb-3">
+            <label for="username">Username:</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+        </div>
+        <div class="mb-3">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <div class="mb-3">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <div class="mb-3">
+            <label for="confirm_password">Confirm Password:</label>
+            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="checkbox" id="check" name="agree" required>
+            <label class="form-check-label" for="check">I agree</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <br><small>By clicking on "I agree" and "Submit" button, you are creating an account, and agree to
+            Project-Artimus' <strong>Terms of Service</strong> and <strong>Privacy Policy</strong></small>
+    </form>
+    </div>
+</div>{% endblock %}

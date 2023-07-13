@@ -29,17 +29,13 @@ This repository constains the following files:
 | -------------- | --------------------- |
 |[AUTHORS](./AUTHORS) | Contains info about authors of the project |
 
-## API Documentation 📋
-* POST /api/test: Initiates a new security test based on the provided parameters
-* GET /api/test/{test_id}: Retrieves the status and results of a specific security test.
-* GET /api/test/recent: Retrieves the list of recent security tests.
-* GET /api/report/{report_id}: Retrieves the analysis report for a specific test.
-* POST /api/report/{report_id}/feedback: Submits feedback on a specific analysis report.
 
 ## Installation 🛠️
 - Clone the repository: git clone https://github.com/yourusername/project-artimus.git
 - Navigate to the project directory: cd project-artimus
 - Install the required dependencies: pip install -r requirements.txt
+- The API for testing the URL is owasp-zap (pip install python-owasp-zap-v2.4) so it needs to be installed and run as a subprocess before the flask app is started.
+Make sure you set the API KEY in owasp-zap and configure in views.py
 - Set up the MySQL database and configure the connection details in the configuration file.
 - Run the application: python3 app.py
 - Access the web application by visiting http://localhost:5000 in your web browser.

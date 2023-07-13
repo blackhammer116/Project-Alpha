@@ -1,0 +1,19 @@
+.hover-blue:hover {
+  color: blue !important;
+  transform: scale(1.1);
+}
+
+.hover-zoom:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+      'FILL' 1,
+      'wght' 400,
+      'GRAD' 10,
+      'opsz' 48;
+  font-size: 35px;
+  float: left;
+}
