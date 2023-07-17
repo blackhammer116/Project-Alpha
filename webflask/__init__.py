@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from werkzeug.security import generate_password_hash
 
 db = SQLAlchemy()
 DB_NAME = "fullstack"
@@ -22,6 +23,21 @@ def create_app():
     with app.app_context():
         db.create_all()
         print('Created Database!')
+
+        # Create an admin user if not already present
+        admin_user = User.query.filter_by(username='admin').first()
+        password_hash = generate_password_hash('admin_password', method='scrypt')
+
+        if not admin_user:
+            admin_user = User(
+                username='admin',
+                email='admin@example.com',
+                password=password_hash,
+                is_admin=True
+            )
+            db.session.add(admin_user)
+            db.session.commit()
+            print('Admin Created!')
     
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
