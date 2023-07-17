@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Admin Panel{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <h3 class="text-center">Admin Panel</h3>
+  <p class="text-center">Total Users: {{ users|length }}</p>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Note</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.note }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,10 +1,10 @@
 import time
 #import subprocess
 import json
-from flask import Blueprint, render_template, request, flash, jsonify
+from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from flask_login import login_required, current_user
 from zapv2 import ZAPv2
-from webflask.models import Note
+from webflask.models import Note, User
 from webflask import db
 
 views = Blueprint('views', __name__)
@@ -46,6 +46,7 @@ def search():
     return render_template('search.html', results=results, query=search_query, show_search=show_search, user=current_user)
 
 @views.route('/delete-note', methods=['POST'])
+@login_required
 def delete_note():
     note = json.loads(request.data)
     noteId = note['noteId']
@@ -55,7 +56,9 @@ def delete_note():
             db.session.delete(note)
             db.session.commit()
     
-    return jsonify({})
+    #return jsonify({})
+    return render_template("home.html", user=current_user, username=current_user.username)
+
 
 @views.route('/scan_url', methods=['GET', 'POST'])
 #@login_required
@@ -112,3 +115,13 @@ def scan_url():
             #zap_process.wait()
             return render_template('scan_url.html', user=current_user, error_message=error_message)
     return render_template('scan_url.html', user=current_user)
+
+@views.route('/admin-panel')
+@login_required
+def admin_panel():
+    if current_user.is_admin:
+        users = User.query.all()
+        return render_template('admin_panel.html', users=users, user=current_user)
+    else:
+        flash('You are not authorized to access the admin panel.', 'error')
+        return redirect(url_for('views.home'))

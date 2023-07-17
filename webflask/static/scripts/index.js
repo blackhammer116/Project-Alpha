@@ -3,7 +3,7 @@ function deleteNote(noteId) {
     method: "POST",
     body: JSON.stringify({ noteId: noteId }),
   }).then((_res) => {
-    window.location.href = "/";
+    window.location.href = "/home";
   });
 }
 
@@ -15,14 +15,3 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-
-document.addEventListener("DOMContentLoaded", function() {
-  const form = document.querySelector("scanForm");
-  const loadingSpinner = document.getElementById("loadingSpinner");
-  const results = document.getElementById("resultsContainer");
-
-  form.addEventListener("submit", function() {
-      loadingSpinner.style.display = "block";
-      results.style.display = "none";
-  });
-});

@@ -1,5 +1,4 @@
 from flask_login import UserMixin
-#from sqlalchemy.sql import func
 from webflask import db
 from datetime import datetime
 
@@ -8,6 +7,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(150))
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(255))
+    is_admin = db.Column(db.Boolean, default=False)  # New field for admin status
     notes = db.relationship('Note')
 
 class Note(db.Model):
