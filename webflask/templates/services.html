@@ -1,0 +1,30 @@
+{% extends "base.html" %}{% block title %}Login{% endblock %}
+{% block content %}
+<div class="container-fluid mt-3">
+    <div class="container-fluid row">
+        <div class="col-sm m-3 rounded shadow">
+            <form method="POST">
+                <div class="m-2">
+                    <p class="mb-2">Select Service(s):</p>
+                    <div class="form-control">
+                        <input type="checkbox" id="Computer_pen_test" name="services" value="Computer pen test">
+                        <label for="Computer_pen_test">Computer pen test</label><br>
+                        <input type="checkbox" id="Server_pen_test" name="services" value="Server pen test">
+                        <label for="Server_pen_test">Server pen test</label><br>
+                        <input type="checkbox" id="Android_pen_test" name="services" value="Android pen test">
+                        <label for="Android_pen_test">Android pen test</label><br>
+                        <input type="checkbox" id="Network_scan" name="services" value="Network scan">
+                        <label for="Network_scan">Network scan</label><br>
+                        <input type="checkbox" id="Web_application_security_testing" name="services"
+                            value="Web application security testing">
+                        <label for="Web_application_security_testing">Web application security testing</label><br>
+                    </div>
+                    <label class="mt-2" for="ip">IP Address:</label>
+                    <input type="text" class="form-control" id="ip" placeholder="Enter your IP Address" name="ip" required>
+                    <button type="submit" class="btn btn-primary mt-2">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

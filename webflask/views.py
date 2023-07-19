@@ -4,7 +4,7 @@ import json
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from flask_login import login_required, current_user
 from zapv2 import ZAPv2
-from webflask.models import Note, User
+from webflask.models import Note, User, TestRequest, Service
 from webflask import db
 
 views = Blueprint('views', __name__)
@@ -56,8 +56,8 @@ def delete_note():
             db.session.delete(note)
             db.session.commit()
     
-    #return jsonify({})
-    return render_template("home.html", user=current_user, username=current_user.username)
+    return jsonify({})
+    #return render_template("home.html", user=current_user, username=current_user.username)
 
 
 @views.route('/scan_url', methods=['GET', 'POST'])
@@ -125,3 +125,25 @@ def admin_panel():
     else:
         flash('You are not authorized to access the admin panel.', 'error')
         return redirect(url_for('views.home'))
+
+@views.route('/submit-test-request', methods=['POST', 'GET'])
+@login_required
+def submit_test_request():
+    # Retrieve form data
+    if request.method == 'POST':
+        selected_service = request.form.getlist('services')
+        print(f"This {selected_service}")
+        services = Service.query.filter(Service.name.in_(selected_service)).order_by(Service.service_id).all()
+        print(f"Total {services}")
+
+    # Create a new test request and associate selected services
+        if services:
+            new_request = TestRequest(user_id=current_user.id, services=services)
+            db.session.add(new_request)
+            db.session.commit()
+            flash('Test request submitted successfully!', category='success')
+        else:
+            flash('No services selected!', category='error')
+
+    return render_template('services.html', user=current_user)
+    

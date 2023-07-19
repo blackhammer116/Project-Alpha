@@ -10,7 +10,7 @@ app = create_app()
 app.app_context().push()
 
 admin = User(
-    username='admin',
+    username='Admin',
     email='admin@example.com',
     password=password_hash,
     is_admin=True
