@@ -15,3 +15,8 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+function deleteTableRow(button) {
+  const row = button.closest('tr');
+  row.remove();
+}

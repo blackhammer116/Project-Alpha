@@ -4,28 +4,47 @@
 {% block content %}
 <div class="container-fluid">
   <h3 class="text-center">Admin Panel</h3>
-  <p class="text-center">Total Users: {{ users|length }}</p>
+  <p class="text-center">Total Users: {{ users|rejectattr('is_admin')|list|length }}</p>
   <table class="table">
     <thead>
       <tr>
         <th>#</th>
         <th>Name</th>
-        <th>Note</th>
+        <th>Test Requests</th>
       </tr>
     </thead>
     <tbody>
-      {% for user in users %}
+      {% set counter = namespace(value=1) %}
+      {% for user in users if not user.is_admin %}
       <tr>
-        <td>{{ loop.index }}</td>
+        <td>{{ counter.value }}</td>
         <td>{{ user.username }}</td>
         <td>
-          <ul>
-            {% for note in user.notes %}
-            <li>{{ note.data }}</li>
-            {% endfor %}
-          </ul>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Service</th>
+                <th>IP</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for test_request in user.test_requests %}
+              <tr>
+                <td>
+                  <ul>
+                    {% for service in test_request.services %}
+                    <li>{{ service.name }}</li>
+                    {% endfor %}
+                  </ul>
+                </td>
+                <td>{{ test_request.ip }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </td>
       </tr>
+      {% set counter.value = counter.value + 1 %}
       {% endfor %}
     </tbody>
   </table>

@@ -1,6 +1,6 @@
+from datetime import datetime
 from flask_login import UserMixin
 from webflask import db
-from datetime import datetime
 
 test_request_service = db.Table(
     'test_request_service',
@@ -34,7 +34,7 @@ class Note(db.Model):
 class TestRequest(db.Model):
     __tablename__ = 'test_request'
     request_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
     ip = db.Column(db.String(100))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     services = db.relationship(

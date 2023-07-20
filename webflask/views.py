@@ -9,10 +9,12 @@ from webflask import db
 
 views = Blueprint('views', __name__)
 
+
 @views.route('/', methods=['GET', 'POST'])
 def home_page():
-    show_div = True # Set the value of show_div
+    show_div = True  # Set the value of show_div
     return render_template("base.html", show_div=show_div, user=current_user)
+
 
 @views.route('/home', methods=['GET', 'POST'])
 @login_required
@@ -28,8 +30,9 @@ def home():
             db.session.commit()
             flash('Note added successfully!', category='success')
 
-    show_search = True # show_search bar
+    show_search = True  # show_search bar
     return render_template("home.html", user=current_user, show_search=show_search, username=current_user.username)
+
 
 @views.route('/search', methods=['GET', 'POST'])
 @login_required
@@ -40,10 +43,11 @@ def search():
         search_query = request.form.get('search_query')
         results = Note.query.filter(
             Note.data.ilike(f'%{search_query}%'),
-            Note.user_id==current_user.id).all()
-    
-    show_search = True # show_search bar
+            Note.user_id == current_user.id).all()
+
+    show_search = True  # show_search bar
     return render_template('search.html', results=results, query=search_query, show_search=show_search, user=current_user)
+
 
 @views.route('/delete-note', methods=['POST'])
 @login_required
@@ -55,13 +59,13 @@ def delete_note():
         if note.user_id == current_user.id:
             db.session.delete(note)
             db.session.commit()
-    
+
     return jsonify({})
-    #return render_template("home.html", user=current_user, username=current_user.username)
+    # return render_template("home.html", user=current_user, username=current_user.username)
 
 
 @views.route('/scan_url', methods=['GET', 'POST'])
-#@login_required
+# @login_required
 def scan_url():
     if request.method == 'POST':
         scan_url = request.form.get('scan_url')
@@ -70,13 +74,15 @@ def scan_url():
             #zap_process = subprocess.Popen(['owasp-zap', '-daemon', '-host', '0.0.0.0', '-port', '8080'])
 
             # Wait for ZAP to initialize
-            #time.sleep(20)
+            # time.sleep(20)
             time.sleep(5)
 
             # Initialize the ZAP API client
             zap_api_key = 'fullstack'  # Replace with your ZAP API key
-            zap_base_url = 'http://localhost:8080'  # Replace with the base URL of your ZAP instance
-            zap = ZAPv2(apikey=zap_api_key, proxies={'http': zap_base_url, 'https': zap_base_url})
+            # Replace with the base URL of your ZAP instance
+            zap_base_url = 'http://localhost:8080'
+            zap = ZAPv2(apikey=zap_api_key, proxies={
+                        'http': zap_base_url, 'https': zap_base_url})
 
             # Start a new ZAP session
             zap.core.new_session()
@@ -93,28 +99,30 @@ def scan_url():
 
             # Store the alerts in a list
             unique_alerts = {}  # To keep track of unique alerts
-            
+
             # Iterate over the alerts and add unique alerts to the dictionary
             for alert in alerts:
                 alert_string = alert.get('alert')
                 risk = alert.get('risk')
                 solution = alert.get('solution')
                 if alert_string not in unique_alerts:
-                    unique_alerts[alert_string] = {'risk': risk, 'solution': solution}
+                    unique_alerts[alert_string] = {
+                        'risk': risk, 'solution': solution}
 
             # Stop the OWASP ZAP subprocess
-            #zap_process.terminate()
-            #zap_process.wait()
+            # zap_process.terminate()
+            # zap_process.wait()
 
             return render_template('scan_url.html', user=current_user, scan_url=scan_url, alerts=unique_alerts)
         except Exception as e:
             error_message = str(e)
 
             # Stop the OWASP ZAP subprocess
-            #zap_process.terminate()
-            #zap_process.wait()
+            # zap_process.terminate()
+            # zap_process.wait()
             return render_template('scan_url.html', user=current_user, error_message=error_message)
     return render_template('scan_url.html', user=current_user)
+
 
 @views.route('/admin-panel')
 @login_required
@@ -126,24 +134,44 @@ def admin_panel():
         flash('You are not authorized to access the admin panel.', 'error')
         return redirect(url_for('views.home'))
 
+
 @views.route('/submit-test-request', methods=['POST', 'GET'])
 @login_required
 def submit_test_request():
     # Retrieve form data
     if request.method == 'POST':
         selected_service = request.form.getlist('services')
-        print(f"This {selected_service}")
-        services = Service.query.filter(Service.name.in_(selected_service)).order_by(Service.service_id).all()
-        print(f"Total {services}")
+        ip_address = request.form.get('ip')
 
-    # Create a new test request and associate selected services
-        if services:
-            new_request = TestRequest(user_id=current_user.id, services=services)
-            db.session.add(new_request)
-            db.session.commit()
-            flash('Test request submitted successfully!', category='success')
+        if not ip_address:
+            flash('IP address is required!', category='error')
         else:
-            flash('No services selected!', category='error')
+            services = Service.query.filter(Service.name.in_(
+            selected_service)).order_by(Service.service_id).all()
 
-    return render_template('services.html', user=current_user)
-    
+            # Create a new test request and associate selected services
+            if services:
+                new_request = TestRequest(
+                    user_id=current_user.id, ip=ip_address, services=services)
+                db.session.add(new_request)
+                db.session.commit()
+                flash('Test request submitted successfully!', category='success')
+            else:
+                flash('No services selected!', category='error')
+
+    return render_template('services.html', user=current_user, username=current_user.username)
+
+'''
+@views.route('/delete-service', methods=['POST'])
+@login_required
+def delete_service():
+    service = json.loads(request.services)
+    noteId = note['noteId']
+    note = Note.query.get(noteId)
+    if note:
+        if note.user_id == current_user.id:
+            db.session.delete(note)
+            db.session.commit()
+
+    return jsonify({})
+'''
