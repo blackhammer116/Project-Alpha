@@ -36,6 +36,7 @@ This repository constains the following files:
 - Install the required dependencies: pip install -r requirements.txt
 - The API for testing the URL is owasp-zap (pip install python-owasp-zap-v2.4) so it needs to be installed and run as a subprocess before the flask app is started.
 Make sure you set the API KEY in owasp-zap and configure in views.py
+example - Lets run it as a background process and bind it to port 8080 (owasp-zap -daemon -port 8080 -host 0.0.0.0 -config api.key='your preferred key')
 - Set up the MySQL database and configure the connection details in the configuration file.
 - Run the application: python3 app.py
 - Access the web application by visiting http://localhost:5000 in your web browser.
