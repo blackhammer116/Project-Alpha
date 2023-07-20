@@ -5,8 +5,8 @@ from webflask import db
 test_request_service = db.Table(
     'test_request_service',
     db.Column('request_id', db.Integer,
-              db.ForeignKey('test_request.request_id')),
-    db.Column('service_id', db.Integer, db.ForeignKey('service.service_id'))
+              db.ForeignKey('test_request.request_id', ondelete='CASCADE')),
+    db.Column('service_id', db.Integer, db.ForeignKey('service.service_id', ondelete='CASCADE'))
 )
 
 
