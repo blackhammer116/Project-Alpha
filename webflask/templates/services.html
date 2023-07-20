@@ -1,4 +1,4 @@
-{% extends "base.html" %}{% block title %}Login{% endblock %}
+{% extends "base.html" %}{% block title %}Services{% endblock %}
 {% block content %}
 <div class="container-fluid mt-3">
     <div class="container-fluid mb-3">
@@ -27,7 +27,7 @@
         </thead>
         <tbody>
             {% for test_request in user.test_requests %}
-            <tr>
+            <tr id="test-request-row-{{ test_request.request_id }}">
                 <td>
                     <ul class="list-group-numbered">
                         {% for service in test_request.services %}
@@ -38,7 +38,8 @@
                     </ul>
                 </td>
                 <td>{{ test_request.ip }}</td>
-                <td> <button type="button" class="btn-close float-end" onclick="deleteTableRow(this)"></button>
+                <td> <button type="button" class="btn-close float-end"
+                        onclick="deleteTestRequest({{ test_request.request_id }})"></button>
                 </td>
             </tr>
             {% endfor %}
@@ -49,7 +50,7 @@
 
 <div class="container-fluid row">
     <div class="col-sm m-3 rounded shadow">
-        <form method="POST">
+        <form method="POST" id="test-request-form">
             <div class="m-2">
                 <p class="mb-2">Select Service(s):</p>
                 <div class="form-control">

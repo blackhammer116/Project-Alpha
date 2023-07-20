@@ -61,7 +61,6 @@ def delete_note():
             db.session.commit()
 
     return jsonify({})
-    # return render_template("home.html", user=current_user, username=current_user.username)
 
 
 @views.route('/scan_url', methods=['GET', 'POST'])
@@ -161,17 +160,16 @@ def submit_test_request():
 
     return render_template('services.html', user=current_user, username=current_user.username)
 
-'''
-@views.route('/delete-service', methods=['POST'])
+@views.route('/services/delete-test-request/<int:request_id>', methods=['POST'])
 @login_required
-def delete_service():
-    service = json.loads(request.services)
-    noteId = note['noteId']
-    note = Note.query.get(noteId)
-    if note:
-        if note.user_id == current_user.id:
-            db.session.delete(note)
-            db.session.commit()
+def delete_test_request(request_id):
+    test_request = TestRequest.query.get(request_id)
+    # Check if the test request exists and belongs to the current user
+    if test_request and test_request.user_id == current_user.id:
+        db.session.delete(test_request)
+        db.session.commit()
+        return '', 204  # Return 'No Content' status for successful deletion
+    else:
+        # Test request not found or user does not have permission
+        return 'Unauthorized', 401  # Return 'Unauthorized' status
 
-    return jsonify({})
-'''

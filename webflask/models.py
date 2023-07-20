@@ -38,7 +38,7 @@ class TestRequest(db.Model):
     ip = db.Column(db.String(100))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     services = db.relationship(
-        'Service', secondary='test_request_service', backref='test_requests')
+        'Service', secondary=test_request_service, backref='test_requests')
 
 
 class Service(db.Model):

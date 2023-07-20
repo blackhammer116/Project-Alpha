@@ -1,2 +1,3 @@
-use fullstack;
-select * from test_request;
+USE fullstack;
+DELETE FROM test_request WHERE user_id = 2;
+
