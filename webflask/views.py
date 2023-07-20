@@ -16,22 +16,32 @@ def home_page():
     return render_template("base.html", show_div=show_div, user=current_user)
 
 
-@views.route('/home', methods=['GET', 'POST'])
+@views.route('/home', methods=['POST', 'GET'])
 @login_required
 def home():
+    # Retrieve form data
     if request.method == 'POST':
-        note = request.form.get('note')
+        selected_service = request.form.getlist('services')
+        ip_address = request.form.get('ip')
 
-        if len(note) < 1:
-            flash('Note is too short!', category='error')
+        if not ip_address:
+            flash('IP address is required!', category='error')
         else:
-            new_note = Note(data=note, user_id=current_user.id)
-            db.session.add(new_note)
-            db.session.commit()
-            flash('Note added successfully!', category='success')
+            services = Service.query.filter(Service.name.in_(
+            selected_service)).order_by(Service.service_id).all()
 
-    show_search = True  # show_search bar
-    return render_template("services.html", user=current_user, show_search=show_search, username=current_user.username)
+            # Create a new test request and associate selected services
+            if services:
+                new_request = TestRequest(
+                    user_id=current_user.id, ip=ip_address, services=services)
+                db.session.add(new_request)
+                db.session.commit()
+                flash('Test request submitted successfully!', category='success')
+            else:
+                flash('No services selected!', category='error')
+    show_search = True
+    return render_template('services.html', user=current_user, username=current_user.username, show_search=show_search )
+
 
 
 @views.route('/search', methods=['GET', 'POST'])
@@ -39,28 +49,26 @@ def home():
 def search():
     results = []  # Initialize results with an empty list
     search_query = ''  # Assign an initial value to search_query
+    selected_services = []  # Initialize selected_services with an empty list
+
     if request.method == 'POST':
         search_query = request.form.get('search_query')
-        results = Note.query.filter(
-            Note.data.ilike(f'%{search_query}%'),
-            Note.user_id == current_user.id).all()
+        selected_services = request.form.getlist('services')
+
+        print("Search Query:", search_query)
+        print("Selected Services:", selected_services)
+        # Filter the services based on the search query and selected services
+        query = Service.query
+        if search_query:
+            query = query.filter(Service.name.ilike(f'%{search_query}%'))
+
+        services = query.filter(Service.name.in_(selected_services)).order_by(Service.service_id).all()
+
+        results = {'services': services}
 
     show_search = True  # show_search bar
     return render_template('search.html', results=results, query=search_query, show_search=show_search, user=current_user)
 
-
-@views.route('/delete-note', methods=['POST'])
-@login_required
-def delete_note():
-    note = json.loads(request.data)
-    noteId = note['noteId']
-    note = Note.query.get(noteId)
-    if note:
-        if note.user_id == current_user.id:
-            db.session.delete(note)
-            db.session.commit()
-
-    return jsonify({})
 
 
 @views.route('/scan_url', methods=['GET', 'POST'])
@@ -69,11 +77,6 @@ def scan_url():
     if request.method == 'POST':
         scan_url = request.form.get('scan_url')
         try:
-            # Start OWASP ZAP as a subprocess
-            #zap_process = subprocess.Popen(['owasp-zap', '-daemon', '-host', '0.0.0.0', '-port', '8080'])
-
-            # Wait for ZAP to initialize
-            # time.sleep(20)
             time.sleep(5)
 
             # Initialize the ZAP API client
@@ -108,17 +111,10 @@ def scan_url():
                     unique_alerts[alert_string] = {
                         'risk': risk, 'solution': solution}
 
-            # Stop the OWASP ZAP subprocess
-            # zap_process.terminate()
-            # zap_process.wait()
-
             return render_template('scan_url.html', user=current_user, scan_url=scan_url, alerts=unique_alerts)
         except Exception as e:
             error_message = str(e)
 
-            # Stop the OWASP ZAP subprocess
-            # zap_process.terminate()
-            # zap_process.wait()
             return render_template('scan_url.html', user=current_user, error_message=error_message)
     return render_template('scan_url.html', user=current_user)
 
@@ -134,33 +130,6 @@ def admin_panel():
         return redirect(url_for('views.home'))
 
 
-@views.route('/submit-test-request', methods=['POST', 'GET'])
-@login_required
-def submit_test_request():
-    # Retrieve form data
-    if request.method == 'POST':
-        selected_service = request.form.getlist('services')
-        ip_address = request.form.get('ip')
-
-        if not ip_address:
-            flash('IP address is required!', category='error')
-        else:
-            services = Service.query.filter(Service.name.in_(
-                selected_service)).order_by(Service.service_id).all()
-
-            # Create a new test request and associate selected services
-            if services:
-                new_request = TestRequest(
-                    user_id=current_user.id, ip=ip_address, services=services)
-                db.session.add(new_request)
-                db.session.commit()
-                flash('Test request submitted successfully!', category='success')
-            else:
-                flash('No services selected!', category='error')
-
-    return render_template('services.html', user=current_user, username=current_user.username)
-
-
 @views.route('/services/delete-test-request/<int:request_id>', methods=['POST'])
 @login_required
 def delete_test_request(request_id):
@@ -173,3 +142,4 @@ def delete_test_request(request_id):
     else:
         # Test request not found or user does not have permission
         return 'Unauthorized', 401  # Return 'Unauthorized' status
+
