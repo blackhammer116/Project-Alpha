@@ -31,7 +31,7 @@ def home():
             flash('Note added successfully!', category='success')
 
     show_search = True  # show_search bar
-    return render_template("home.html", user=current_user, show_search=show_search, username=current_user.username)
+    return render_template("services.html", user=current_user, show_search=show_search, username=current_user.username)
 
 
 @views.route('/search', methods=['GET', 'POST'])
@@ -146,7 +146,7 @@ def submit_test_request():
             flash('IP address is required!', category='error')
         else:
             services = Service.query.filter(Service.name.in_(
-            selected_service)).order_by(Service.service_id).all()
+                selected_service)).order_by(Service.service_id).all()
 
             # Create a new test request and associate selected services
             if services:
@@ -160,6 +160,7 @@ def submit_test_request():
 
     return render_template('services.html', user=current_user, username=current_user.username)
 
+
 @views.route('/services/delete-test-request/<int:request_id>', methods=['POST'])
 @login_required
 def delete_test_request(request_id):
@@ -172,4 +173,3 @@ def delete_test_request(request_id):
     else:
         # Test request not found or user does not have permission
         return 'Unauthorized', 401  # Return 'Unauthorized' status
-
