@@ -14,7 +14,7 @@
 - [Contact](#Contact)
 
 ## Description 📄
-Project Artimus is a web application aimed at providing comprehensive security testing and analysis services for websites, web applications, and servers. With a focus on identifying vulnerabilities and recommending actions to enhance security, Project Artimus helps clients ensure the safety and protection of their digital assets.
+Project Alpha is a web application aimed at providing comprehensive security testing and analysis services for websites, web applications, and servers. With a focus on identifying vulnerabilities and recommending actions to enhance security, Project Alpha helps clients ensure the safety and protection of their digital assets.
 
 ## Environment 💻
 The console was developed on Ubuntu 20.04 LTS using python3 (version 3.8.5) and adheres to pep8 style documentaion.
@@ -31,8 +31,8 @@ This repository constains the following files:
 
 
 ## Installation 🛠️
-- Clone the repository: git clone https://github.com/yourusername/project-artimus.git
-- Navigate to the project directory: cd project-artimus
+- Clone the repository: git clone https://github.com/yourusername/project-alpha.git
+- Navigate to the project directory: cd project-alpha
 - Install the required dependencies: pip install -r requirements.txt
 - The API for testing the URL is owasp-zap (pip install python-owasp-zap-v2.4) so it needs to be installed and run as a subprocess before the flask app is started.
 Make sure you set the API KEY in owasp-zap and configure in views.py
